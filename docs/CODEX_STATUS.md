@@ -25,7 +25,19 @@ Base: `81cf929`. Terra agents implemented T3 (xhigh), T4 (high), T5/T6 (high), a
 
 Focused checks passed for priority processing, spot/briefing exports and validation. The initial concurrent suite caught the mixed-provenance defect described above; it was fixed before the final suite. Final integrated test result and commit are recorded after verification below.
 
-- Full backend suite: 336 tests passed on Windows/Python 3.12.14.
+- Final full backend suite after syncing with `0a35a53`: 337 tests passed on Windows/Python 3.12.14.
 - After adding the stale-input regression: all 13 priority tests passed; all 6 spot/briefing and 7 validation tests also passed.
 - Integrated TestClient smoke: health, real cached-place lookup, real cached rainfall, spot check, EN/FIL briefing JSON, CSV and HTML return 200. Validation correctly returns 404 data_unavailable. Missing NISAR/motion values remain null with reasons.
 - No frontend files changed or frontend build/browser checks performed by Codex. No observed scientific validation was performed.
+
+## Task commits
+
+| Task | Commit |
+|---|---|
+| T1 / T2 | No real-data commit; user deferred access |
+| T3 | `b07e862` |
+| T4 | `806a791` |
+| T5 / T6 | `2651eb0` (plus final response-metadata cleanup) |
+| T7 and API registration | `3804bf5` (plus this status update) |
+
+These commits are on `claude/kind-pascal-93n7ns`, rebased on the coordinator's latest main without editing the frontend. The test run is software evidence, not scientific validation.

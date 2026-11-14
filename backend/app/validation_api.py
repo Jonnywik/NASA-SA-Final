@@ -1,6 +1,5 @@
 """Read-only validation results; calculations are performed offline."""
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 

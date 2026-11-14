@@ -30,7 +30,9 @@ def main():
     if not metrics["validPixels"]:
         parser.error("No jointly valid pixels")
     result = {"area": "camanava_2026", "status": "partial", "dataKind": "derived",
-              "source": provenance, "timestamp": datetime.now(timezone.utc).isoformat(),
+              "source": provenance, "generatedAt": datetime.now(timezone.utc).isoformat(),
+              "nativeResolution": "coarser common raster grid",
+              "units": {"agreement": "fraction", "validPixels": "pixels"},
               "agreement": metrics, "sensitivity": None,
               "warnings": ["Threshold sensitivity and ground-motion comparison are not included."],
               "limitations": ["Nearest-neighbour comparison is on the coarser raster grid; acquisitions can be up to two days apart.",
