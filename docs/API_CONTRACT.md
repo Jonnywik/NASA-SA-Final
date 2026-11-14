@@ -170,3 +170,14 @@ Data and licences (full detail with sha256 in `backend/data/cache/places/manifes
 ## Coordinator, wave 2
 
 `GET /spot-check?lon=&lat=`, `GET /briefing/place?lon=&lat=&lang=en|fil`, and priority zones (rhythm ≥ half AND LOS sinking).
+
+## Spot check and briefing (Codex T4)
+
+- `GET /api/v1/spot-check?lon=&lat=` returns `{area,lon,lat,streams,dataKind,source,generatedAt,warnings,limitations}`. Streams are `place`, `nisar`, `rainfall`, `motion`, `priority`, and `exposure`; each carries `{value,reason,source,dataKind,nativeResolution,units}` and an available source timestamp. Missing parts have null values and a reason. Any synthetic stream makes the full response synthetic. Outside the study bbox gives 404 `outside_coverage`; invalid coordinates give 422 `invalid_request`.
+- `GET /api/v1/briefing/place?lon=&lat=&lang=en|fil&format=json|csv|html` returns a deterministic briefing. JSON contains `{language,translationStatus,dataKind,sentences,facts,source,generatedAt,warnings,limitations}`. CSV columns are `field,value,units,source,dataKind`. HTML is self-contained, printable, escaped, and explicitly labels synthetic content. Filipino translation remains `pending native-speaker review`. There is no runtime LLM. The frontend coordinator must wire these additive routes; no frontend files were changed for this task.
+
+## Priority and validation integration (Codex T3/T5)
+
+Script `50_priority_zones.py` writes `priority_mask.tif` (0/1, nodata 255) and `priority_manifest.json` alongside the NISAR product. The manifest binds the output and source hashes, motion run, threshold, sensitivity and exposure. Both spot-check and `/places/exposure?mask=priority` require intact priority provenance and reject changed flood/motion inputs. Synthetic provenance propagates from either input. The script rejects upsampling a coarser flood mask onto a finer motion grid; preparing a coarser common motion product is required for that case.
+
+`GET /api/v1/validation?area=camanava_2026` reads offline comparison results. A valid measured comparison returns `dataKind: derived`, `status: partial`, `agreement` (confusion matrix, validPixels, overallAgreement, F1 and IoU), source metadata, timestamp, warnings and limitations. Missing/invalid/literature-only caches return 404 `data_unavailable`; unknown area returns 404 `unknown_area`. Literature context and synthetic fixtures do not establish observed validation. Script `60_validation.py` requires normalized binary rasters, compatible north-up CRS grids and documented independent-source provenance. Acquisition dates must be within two days.
