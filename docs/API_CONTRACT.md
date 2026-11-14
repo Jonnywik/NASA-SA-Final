@@ -11,7 +11,7 @@ The coordinator owns this file. Agents may refine field details **inside their o
 | Bbox (W, S, E, N; WGS84) | `[120.88, 14.60, 121.04, 14.82]` |
 | Representative climate point | lon `120.96`, lat `14.70` |
 | Wet season | June–November |
-| NISAR default track | 133 descending, frame 081, mode 4005 DHDH (HH+HV), 23 Jun–2 Nov 2026 |
+| NISAR default track | **140 ascending, frame 009**, mode 4005 DHDH (HH+HV), 11 GCOV dates 23 Jun–2 Nov 2026, 9 GUNW pairs; ~100% bbox coverage by catalogue footprint (133 D covered only ~35%) |
 | Climate baseline | 1991–2020 |
 | History start | 2000-01-01 |
 
@@ -42,80 +42,108 @@ Each router module exposes `make_router(output_root, read_public_events)`, like 
 
 ## B: NISAR (`nisar_api.py`)
 
+Served from `<output>/camanava_2026/nisar/manifest.json` (written by scripts 20 or 22). `area` defaults to `camanava_2026`. Until a product exists every route returns 404 `data_unavailable`. A synthetic product returns `dataKind: "synthetic"` on every route and `warnings[0]` starts with `SYNTHETIC DEMO DATA`. Every body also carries `source`, `generatedAt`, `nativeResolution`, `units`, `warnings`, `limitations`.
+
+**Resolved (15 Nov):** the default stack is now 140 A / frame 9, because 133 D / frame 81 covers only about 35 % of the bbox. Stacks 032 D / frame 81 and 140 A / frame 9 cover 100 %. See `docs/NISAR_RUNBOOK.md` section 0. `track`, `frame` and the dates below come from the manifest, so they follow whichever stack is run.
+
 ### `GET /nisar/passes?area=camanava_2026`
 ```json
 {
   "area": "camanava_2026", "dataKind": "observed", "sensor": "NISAR L-band SAR",
-  "product": "L2 GCOV", "track": 133, "direction": "descending", "frame": 81,
+  "product": "L2 GCOV", "track": 133, "direction": "descending", "frame": 81, "mode": "4005",
   "polarizations": ["HH", "HV"],
-  "rule": {"description": "...", "hhThresholdDb": -18.0, "hvThresholdDb": -26.0, "calibration": "..."},
+  "rule": {"description": "...", "hhThresholdDb": -18.0, "hvThresholdDb": -26.0,
+           "calibration": {"status": "calibrated | uncalibrated-default", "method": "...", "knownWater": "...", "waterPixels": 0}},
+  "permanentWater": {"fraction": 0.9, "minValidPasses": 3},
+  "possibleFloodedVegetation": {"marginDb": 3.0, "label": "possible flooded vegetation (L-band)", "landCoverMask": null},
+  "verification": {"layout": "unverified | verified | synthetic", "evidence": []},
+  "studyAreaKm2": 419.5,
   "passes": [{
     "id": "20260623", "date": "2026-06-23", "acquisitionTime": "2026-06-23T10:32:20Z",
-    "productId": "NISAR_L2_PR_GCOV_...", "maturity": "provisional",
+    "acquisitionTimeManila": "2026-06-23T18:32:20+08:00",
+    "productId": "NISAR_L2_PR_GCOV_...", "maturity": "provisional | v1 | synthetic",
     "floodedKm2": 12.3, "permanentWaterKm2": 40.1, "floodedVegetationKm2": 1.2,
-    "validKm2": 380.0, "validFraction": 0.97,
+    "validKm2": 380.0, "validFraction": 0.97, "missingReason": null,
     "overlayUrl": "/api/v1/nisar/overlay/camanava_2026/pass_20260623.png",
-    "backscatterUrl": "/api/v1/nisar/overlay/camanava_2026/hh_20260623.png"
+    "backscatterUrl": "/api/v1/nisar/overlay/camanava_2026/hh_20260623.png",
+    "floodedVegetationUrl": "/api/v1/nisar/overlay/camanava_2026/veg_20260623.png",
+    "polarizationUrl": "/api/v1/nisar/overlay/camanava_2026/pol_20260623.png"
   }],
   "bounds": [[14.60, 120.88], [14.82, 121.04]],
   "source": {}, "generatedAt": "...", "warnings": [], "limitations": []
 }
 ```
+`date` is the UTC date. Areas cover only pixels inside the bbox; `validFraction` is valid area over bbox area. A pass with no valid pixels has `floodedKm2: null` and a `missingReason`. `permanentWaterKm2` is the permanent-water area seen as water on that pass.
 
 ### `GET /nisar/flood-rhythm?area=`
 ```json
 {
-  "area": "camanava_2026", "dataKind": "derived", "passCount": 11,
+  "area": "camanava_2026", "dataKind": "derived", "passCount": 11, "minValidPasses": 3,
   "overlayUrl": "/api/v1/nisar/overlay/camanava_2026/rhythm.png",
+  "legendUrl": "/api/v1/nisar/overlay/camanava_2026/rhythm_legend.png",
   "bounds": [[14.60, 120.88], [14.82, 121.04]],
   "legend": [{"count": 1, "color": "#..."}],
   "km2ByCount": [{"count": 1, "km2": 5.2}],
-  "halfOrMoreKm2": 3.4, "permanentWaterMasked": true,
+  "halfOrMoreKm2": 3.4, "countableKm2": 250.0, "floodedAtLeastOnceKm2": 20.1,
+  "byValidPasses": [{"validPasses": 11, "km2": 240.0, "floodedAtLeastOnceKm2": 19.0}],
+  "permanentWaterMasked": true,
   "method": "count of passes classified as water, over the count of valid passes, per pixel; permanent water excluded",
   "source": {}, "generatedAt": "...", "warnings": [], "limitations": []
 }
 ```
+`halfOrMoreKm2` uses each pixel's own valid-pass count as the denominator. Pixels with fewer than `minValidPasses` valid passes, and permanent water, are not counted. The legend is viridis (colour-blind safe); permanent water is drawn grey in the PNG.
+
+Files other modules read in the same folder: `rhythm.tif` (band 1 = passes flooded, int16, nodata −1), `rhythm_half.tif` (1 = half or more of the pixel's own valid passes, nodata 255), and `manifest.json` with top-level `dataKind`, `passCount`, `version` and `passes[{date, floodedKm2}]`. Note: `places/exposure?mask=rhythm_half` currently thresholds `rhythm.tif` at `ceil(passCount / 2)`, which differs from `halfOrMoreKm2` where some passes are nodata; `rhythm_half.tif` is the matching mask.
 
 ### `GET /nisar/point?area=&lon=&lat=`
-Returns `{ "lon", "lat", "cellCenter", "floodCount", "validCount", "permanentWater": false, "perPass": [{"date": "2026-06-23", "state": "water" | "dry" | "nodata", "hhDb": -19.2, "hvDb": -27.0}], "dataKind" }`. Outside coverage gives 404 `outside_coverage`.
+Returns `{ "lon", "lat", "cellCenter": {"lon", "lat"}, "floodCount", "validCount", "floodCountReason", "permanentWater": false, "possibleFloodedVegetationPasses": 0, "perPass": [{"date": "2026-06-23", "state": "water" | "dry" | "nodata", "hhDb": -19.2, "hvDb": -27.0, "possibleFloodedVegetation": false, "reason": null}], "dataKind" }`. `floodCount` is `null` with `floodCountReason` for permanent water and for pixels with too few valid passes. Missing or non-numeric `lon`/`lat` gives 422 `invalid_request`. A point outside the bbox or grid gives 404 `outside_coverage`.
 
 ### `GET /nisar/overlay/{area}/{name}.png`
-Serves a PNG. `name` must come from a registered manifest; arbitrary paths are refused.
+Serves a PNG whose `name` is registered in the manifest as an overlay and whose SHA-256 still matches. Registered names: `pass_<id>`, `hh_<id>`, `veg_<id>`, `pol_<id>`, `rhythm`, `rhythm_legend`. Anything else: 404 `data_unavailable` (unknown, missing or failed hash) or 422 `invalid_request` (malformed name). Response header `X-Tanaw-Data-Kind` repeats the data kind.
 
-### `GET /nisar/polarization?area=&date=`
-Returns `{ "rgbUrl", "bounds", "channels": {"r": "HH", "g": "HV", "b": "HH/HV"}, "explanation": ["...", "...", "..."] }`.
+### `GET /nisar/polarization?area=&date=YYYY-MM-DD`
+Returns `{ "date", "acquisitionTime", "rgbUrl", "bounds", "channels": {"r": "HH", "g": "HV", "b": "HH/HV"}, "stretchDb": {"r": [-25, 0], "g": [-35, -10], "b": [0, 20]}, "explanation": ["...", "...", "..."], "dataKind" }`. Missing or malformed `date`: 422 `invalid_request`. No pass on that date: 404 `data_unavailable` with `availableDates`. The explanation text still needs reviewer sign-off (flagged in `warnings`).
 
 ### Ground motion
-This reuses the existing P3 routes with `event=camanava_2026`: `/ground-motion` and `/ground-motion/point`. B registers the event and provides `scripts/21_nisar_gunw_chain.py`, which builds the pair configs for scripts 10–12 from the CMR listing.
+This reuses the existing P3 routes with `event=camanava_2026`: `/ground-motion` and `/ground-motion/point`. B registers the event and provides `scripts/21_nisar_gunw_chain.py`, which builds the script-10 source manifests, the script-11 reference config and a run script for 10 → 11 → 12 from the CMR listing. No GUNW file has been read yet; the phase sign and the reference area must be set by a person (runbook section 6). Real products stay `needs-review` until promoted with `scripts/17_review_product.py`.
 
 ## A: Climate, history, outlook, scenarios (`climate_api.py`)
 
-### `GET /climate/rainfall/monthly?area=`
-`{ "point": {"lon", "lat"}, "units": "mm", "baseline": {"period": "1991-2020", "monthlyMeanMm": [12 values]}, "series": [{"year": 2000, "month": 1, "totalMm": 12.1, "anomalyMm": -3.0, "anomalyPct": -20.0, "missingDays": 0}], "source", "nativeResolution": "0.5° x 0.625°", "dataKind": "derived", "retrievedAt", "limitations": ["one grid cell, not a city average"] }`
+Implemented and tested (`backend/tests/test_climate_*.py`). Every endpoint takes `area=camanava_2026` (the default; anything else is 404 `unknown_area`) and serves from `backend/data/cache/climate/`, which `backend/scripts/30_fetch_climate.py` fills (`../.venv/bin/python scripts/30_fetch_climate.py [--force] [--skip-era5]`). A request never calls a provider. If a cache is missing or fails its sha256 check the answer is 503 `upstream_unavailable` (`cachedAt: null`). If a refresh failed but an older cache exists, the older cache is served with a `warnings` entry. Query parameters are validated by hand, so every error uses the `{"detail": {"code", "message"}}` shape. All success bodies carry `dataKind`, `source {name, url, version}`, `retrievedAt`, `nativeResolution`, `warnings`, `limitations`, and `units` where relevant.
+
+Rainfall source: NASA POWER daily `PRECTOTCORR` (mm/day, 0.5° x 0.625° MERRA-2 cell) at lon 120.96, lat 14.70, 1991-01-01 to the last published day. The fill value -999 is missing (null), never 0. A month or season is `complete` only if every day was observed (`MISSING_TOLERANCE_DAYS = 0`); an incomplete month has `totalMm: null`, a `partialMm` and no anomaly. **Data caveats found live:** from 2026-10-01 POWER serves GEOS-IT (near-real-time) instead of MERRA-2 (the responses warn about this), and the POWER cell reads much wetter than ERA5 in the dry months (see `era5-compare`).
+
+### `GET /climate/rainfall/monthly?area=&since=2000`
+`{ "point", "units": "mm", "baseline": {"period": "1991-2020", "monthlyMeanMm": [12], "yearsUsedPerMonth": [12], "rule"}, "series": [{"year", "month", "totalMm", "anomalyMm", "anomalyPct", "missingDays", "complete", "partialMm"}], "lastObservedDay", "method", "dataKind": "derived", ... }`. `anomalyPct` is null when the baseline mean is 0.
 
 ### `GET /climate/rainfall/daily?area=&start=YYYY-MM-DD&end=YYYY-MM-DD`
-`{ "units": "mm/day", "days": [{"date", "mm": 12.3}] }`, with `mm: null` when missing.
+`{ "units": "mm/day", "days": [{"date", "mm", "reason"?}], "coveredFrom", "coveredThrough", "lastObservedDay", "dataKind": "observed" }`. `mm: null` (with `reason`) when missing. Maximum 3700 days. 422 `invalid_request` for bad or reversed dates, 404 `outside_coverage` if the range is wholly outside the cache.
 
 ### `GET /climate/rainfall/season-rank?area=&year=2026`
-`{ "season": "Jun-Nov", "year": 2026, "totalMm", "rank": 3, "of": 27, "complete": false, "seasons": [{"year", "totalMm", "complete"}] }`
+`{ "season": "Jun-Nov", "year", "totalMm", "toDateMm", "partialMm", "observedThrough", "rank", "of", "rankBasis", "rankMeaning": "1 = wettest", "complete", "seasons": [{"year", "totalMm", "toDateMm", "complete"}] }`. For an incomplete season `totalMm` is null and the rank compares `toDateMm` (1 Jun to `observedThrough`) with the same window in every other year (`rankBasis: "to_date_same_window"`); a complete season ranks on its full total (`full_season_total`). Seasons run from 2000. 404 `outside_coverage` for years without data.
 
 ### `GET /climate/rainfall/trend?area=`
-`{ "method": "linear fit on monthly anomalies, seasonal cycle removed", "period": "2000-2026", "slopeMmPerDecade", "ci95": [lo, hi], "n", "significant": false, "limitations": [] }`
+`{ "method", "period": "2000-2026", "slopeMmPerDecade", "ci95": [lo, hi], "n", "effectiveN", "lag1Autocorrelation", "significant", "limitations" }`. OLS on monthly anomalies (1991-2020 calendar-month means removed), complete months only, interval widened for lag-1 autocorrelation. `significant` means the 95% interval excludes 0. No causal claim.
 
 ### `GET /climate/pass-rainfall?area=&dates=2026-06-23,2026-07-05`
-`{ "passes": [{"date", "prior3DayMm", "prior7DayMm", "sameDayMm"}] }`. If `dates` is omitted, the dates come from the NISAR pass list when it is available.
+`{ "passes": [{"date", "sameDayMm", "prior3DayMm", "prior7DayMm", "reasons": {}}], "windowDefinition" }`. Prior windows are the 3 or 7 days before the pass day (the pass day is excluded); a window with any missing day is null and `reasons` names the days. If `dates` is omitted the dates come from the NISAR pass list, else 404 `data_unavailable`. Maximum 60 dates.
 
 ### `GET /climate/outlook?area=`
-`{ "dataKind": "outlook", "model", "runDate", "nativeResolution", "months": [{"year", "month", "meanMm", "memberMinMm", "memberMaxMm", "anomalyVsModelClimatologyMm": null, "members": 51}], "horizonMonths": 6, "limitations": [] }`. If the provider fails, return 503 `upstream_unavailable`, or a dated cache.
+`{ "dataKind": "outlook", "model": null, "modelRequested": "ecmwf_seas5", "modelNote", "runDate": null, "runDateReason", "firstForecastDate", "lastForecastDate", "nativeResolution", "gridCell", "ensembleMembers": 50, "anomaly": {"available", "reason", "basis"}, "months": [{"year", "month", "coveredDays", "monthDays", "fullMonth", "members", "meanMm", "memberMinMm", "memberMaxMm", "anomalyVsModelClimatologyMm", "providerMonthlyMeanMm"}], "horizonMonths", "fullMonths" }`.
+Open-Meteo's response names neither the model nor the run date, so `model` and `runDate` are null with the reason, and `firstForecastDate` (the first day returned, equal to the retrieval day) is given instead. `months` holds only the months the response returns, as the sum of daily rainfall per ensemble member, then mean/min/max across members; the first and last months are partial (`fullMonth: false`). `anomalyVsModelClimatologyMm` is the provider's own `precipitation_anomaly` (model-native, against the model's climatology, not comparable with the POWER baseline); it is null with a reason if the monthly block was not returned. `horizonMonths` counts the calendar months touched (including the partial ones).
 
 ### `GET /climate/scenarios?area=`
-`{ "dataKind": "scenario", "startMonth": "2026-12", "scenarios": [{"id": "normal", "label": "A normal year (1991-2020 mean)", "basis": "...", "months": [{"year", "month", "rainfallMm", "status": "outlook" | "scenario"}]}, {"id": "wet_like_YYYY"}, {"id": "wettest_since_2000"}, {"id": "dry_like_YYYY"}], "limitations": ["conditional scenario, not a prediction"] }`
+`{ "dataKind": "scenario", "startMonth": "2026-12", "lastObservedMonth", "scenarios": [{"id", "label", "basis", "months": [{"year", "month", "rainfallMm", "rainfallSource": "scenario_value", "status": "outlook" | "scenario", "outlook"?: {"meanMm", "memberMinMm", "memberMaxMm", "members", "anomalyVsModelClimatologyMm"}}]}] }`. Ids: `normal` (1991-2020 monthly means), `wet_like_YYYY` and `dry_like_YYYY` (the observed Dec(Y-1) to Nov(Y) monthly sequence ending with the wettest or driest complete Jun-Nov season since 2000; `analogYear`, `analogSeasonTotalMm`), `wettest_since_2000` (per-calendar-month maximum since 2000, `isEnvelope: true`, not a real year). `status` is `outlook` only for a month the seasonal run covers in full; `rainfallMm` is still the scenario's own value and the outlook figures sit alongside. The 12 months start after the month of the last observed day.
 
 ### `GET /climate/flood-scenario?area=&scenarioId=`
-Exploratory. It combines the observed pass rainfall with flooded km² (from B's pass list) to give `{ "relationship": {"n", "method", "points": [{"date", "prior7DayMm", "floodedKm2"}]}, "months": [{"year", "month", "rainfallMm", "expectedFloodedKm2": {"low", "base", "high"}, "status"}], "exploratory": true }`. It returns 404 `data_unavailable` until the NISAR passes exist.
+Exploratory. `{ "scenarioId", "relationship": {"n", "method", "points": [{"date", "prior7DayMm", "floodedKm2"}], "slopeKm2PerMm", "rawTheilSenSlope", "residualRangeKm2", "observedPrior7DayRangeMm"}, "months": [{"year", "month", "rainfallMm", "status", "equivalent7DayMm", "expectedFloodedKm2": {"low", "base", "high"} | null, "reason"?}], "exploratory": true, "nisarDataKind" }`. Method: Theil-Sen line of flooded km² on prior-7-day rainfall, slope floored at 0, low/high = base plus the smallest/largest residual seen (a full-range envelope, not a probability). Monthly rainfall becomes an average 7-day total (month x 7 / days). Months outside the rainfall range seen on the passes are null with a reason, never extrapolated. Needs at least 8 usable passes. `dataKind` is `scenario`, or `synthetic` if the NISAR pass list says so. Errors: 404 `data_unavailable` (no NISAR pass list, or fewer than 8 passes), 422 `invalid_request` (missing or unknown `scenarioId`; `validIds` is listed).
+**Dependency on B:** the API reads `<output>/camanava_2026/nisar/manifest.json` (or `passes.json`), a JSON object with `passes: [{"date", "floodedKm2"}]` and an optional `dataKind`. B should keep that shape (or tell A).
+
+### `GET /climate/rainfall/era5-compare?area=` (extra)
+ERA5 daily rainfall via the Open-Meteo archive API, kept separate from POWER: `{ "series": [{"year", "month", "era5Mm", "powerMm"}], "meanByCalendarMonth2000to2020": [{"month", "era5MeanMm", "powerMeanMm"}], "gridCell" }`. Never merged or averaged with POWER.
 
 ### `GET /timeline/availability?area=`
-`{ "datasets": [{"id": "nasa_power_rainfall", "label", "kind": "climate" | "optical" | "sar_c" | "sar_l" | "insar", "start": "2000-01-01", "end": "...", "cadence", "access": "...", "status": "integrated" | "catalogue_only"}] }`
+`{ "datasets": [{"id", "label", "kind": "climate" | "optical" | "sar_c" | "sar_l" | "insar", "start", "end", "cadence", "access", "status": "integrated" | "catalogue_only", "verified"}] }`. Dates come from live searches cached by script 30: NASA POWER and ERA5 from the cached series, NISAR GCOV from CMR (collections C2854338529-ASF and C3622241360-ASF), Sentinel-1 from CMR (A, B and C SLC), Landsat from the Planetary Computer STAC (`landsat-c2-l2`, first scene since 2000 and latest). Only POWER and ERA5 (and NISAR once B's pass list exists) are `integrated`; Landsat and Sentinel-1 are `catalogue_only`.
 
 ## D: Places and exposure (`places_api.py`)
 

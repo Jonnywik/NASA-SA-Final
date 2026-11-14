@@ -19,6 +19,7 @@ import { fmt } from "./ui";
 import {
   AREA_ID,
   FIXTURES_ON,
+  FIXTURE_SCOPE,
   getFloodScenario,
   getGroundMotion,
   getNisarPasses,
@@ -449,7 +450,7 @@ function Workspace({ onRegional }) {
 
       {FIXTURES_ON && (
         <div role="status" className="border-b border-yellow-300 bg-yellow-400/20 px-3 py-1 text-center text-xs font-bold text-yellow-100" data-testid="fixture-banner">
-          ▨ {t("fixtures.banner")}
+          ▨ {t(FIXTURE_SCOPE === "nisar" ? "fixtures.banner.nisar" : "fixtures.banner")}
         </div>
       )}
 
@@ -482,7 +483,7 @@ function Workspace({ onRegional }) {
 
         {/* findings */}
         <aside
-          className={`${panelOpen ? "h-[46vh]" : "h-0 overflow-hidden border-0"} shrink-0 overflow-y-auto border-t border-slate-700 bg-slate-900 md:h-auto md:w-[400px] md:border-l md:border-t-0`}
+          className={`${panelOpen ? "h-[42vh]" : "h-0 overflow-hidden border-0"} shrink-0 overflow-y-auto border-t border-slate-700 bg-slate-900 md:h-auto md:w-[400px] md:border-l md:border-t-0`}
           aria-label={t("panel.findings")}
           data-testid="findings"
         >
@@ -507,6 +508,7 @@ function Workspace({ onRegional }) {
                     <div className="text-[11px] font-bold uppercase tracking-wider text-fuchsia-100">{t("stories.pin")}</div>
                     {activeStory.name && <div className="text-sm font-semibold text-slate-100">{activeStory.name}</div>}
                     <p className="mt-1 text-xs text-slate-200">{activeStory.text}</p>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     {activeStory.photo && <img src={activeStory.photo} alt={activeStory.photoAlt ?? ""} className="mt-2 max-h-40 rounded" />}
                   </div>
                 )}
