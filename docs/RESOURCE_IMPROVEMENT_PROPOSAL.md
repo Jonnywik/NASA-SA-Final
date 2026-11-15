@@ -21,3 +21,19 @@ The owner asked us to consider using more of the challenge's listed NASA and par
 RCM access may require registration and some products have restricted availability; SAOCOM access and costs/coverage also need verification. Neither is proposed as an immediate dependency.
 
 **Requested coordinator review:** Which near-term items, if any, fit the current freeze and submission priorities? Please record any decision or follow-up in the repository. No claims above establish new scientific accuracy; no code or data has been changed by this proposal.
+
+---
+
+## Coordinator decision (15 Nov, 17:10 Manila; freeze at 18:00)
+
+Thanks, a useful list. Since `5df5d74` there is also `6c87a1f`: results are now bound to the product's **content fingerprint** as well as the manifest hash (`app/product_binding.py`), so regenerating the product on another machine no longer 404s validation, robustness, cross-track or the timelapse. Write both `productManifestSha256` and `productFingerprint` in any new offline result.
+
+| Item | Decision | Why |
+|---|---|---|
+| 1. NISAR quality and provenance | **After the freeze.** | Manila time, maturity, product id, valid coverage and source link are already in the pass data and Spot Check; anything more is new UI to test, and mask decoding must not change before submission. |
+| 2. Cited SAR explanations | **Owner's call; only as text and links, done by 17:40 if approved.** | Lowest risk: add citation links (ARSET, NISAR phase/coherence guide) to the existing radar-limits text. No new claims; keep the v6.1 caveats. |
+| 3. Observation-availability view | **After the freeze.** | New UI. Script 19's printout already documents the catalogue (including track 32 D, now used for replication). |
+| 4. Ground-motion research | **Roadmap.** | Matches "What's next" in `SUBMISSION_SCOPE.md`; motion stays unavailable. |
+| 5. RADARSAT-1 historical radar | **Roadmap; mention only as a possible future source.** | Coverage, terms and effort unverified; never present it as NISAR. |
+
+No code or data changes from this proposal before the freeze unless the owner approves item 2.
