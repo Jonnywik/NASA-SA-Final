@@ -446,7 +446,7 @@ export default function NisarMap({
       {compare?.on && (
         <>
           <div
-            className="absolute inset-y-0 z-[900] w-12 -translate-x-1/2 cursor-ew-resize"
+            className="group absolute inset-y-0 z-[900] w-12 -translate-x-1/2 cursor-ew-resize focus:outline-none focus-visible:outline-none"
             style={{ left: `${compare.split * 100}%`, touchAction: "none" }}
             onPointerDown={(e) => {
               dragging.current = true;
@@ -468,7 +468,7 @@ export default function NisarMap({
           >
             <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-[#1E5B3A] shadow" />
             <div
-              className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[#1E5B3A] bg-white text-[14px] font-bold text-[#1E5B3A] shadow-[0_2px_10px_rgba(20,30,40,0.22)]"
+              className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[#1E5B3A] bg-white text-[14px] font-bold text-[#1E5B3A] shadow-[0_2px_10px_rgba(20,30,40,0.22)] group-focus-visible:ring-2 group-focus-visible:ring-[#1E5B3A] group-focus-visible:ring-offset-2"
               title={t("map.swipe.handle")}
             >
               ◂▸

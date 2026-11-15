@@ -266,7 +266,7 @@ export default function TimeBar({ mode, passes, idx, onIdx, playing, onPlaying, 
         ) : (
           <div className="hidden shrink-0 sm:block">
             <div className="text-[12px] font-semibold text-[#16231B]">
-              {n} {t("rhythm.v2.stat.passes").toLowerCase()}
+              {n} {t("rhythm.v2.stat.passes")}
             </div>
             <div className="text-[11px] text-[#4A5850]">
               {passWindowStart && passWindowEnd ? `${passWindowStart.slice(5)} → ${passWindowEnd.slice(5)}` : "2026"}
@@ -299,13 +299,13 @@ export default function TimeBar({ mode, passes, idx, onIdx, playing, onPlaying, 
               const active = i === idx;
               const pctPos = ((Date.parse(`${p.date}T00:00:00Z`) - rainRange.t0) / (rainRange.t1 - rainRange.t0)) * 100;
               return (
-                <li key={p.id} className="min-w-[44px] flex-1" data-pos={Math.round(pctPos)}>
+                <li key={p.id} className="min-w-[56px] flex-1" data-pos={Math.round(pctPos)}>
                   <button
                     type="button"
                     onClick={() => onIdx(i)}
                     aria-current={active ? "true" : undefined}
                     aria-label={`${t("time.pass")} ${p.date}`}
-                    className={`flex w-full items-center justify-center gap-1 rounded-md border px-1.5 py-1 text-[11px] font-medium tabular-nums transition-colors ${
+                    className={`flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-1 text-[11px] font-medium tabular-nums transition-colors ${
                       active && isSeason
                         ? "border-[#1E5B3A] bg-[#E3EFE7] font-bold text-[#123B25]"
                         : "border-[#DCE3DB] bg-white text-[#4A5850] hover:bg-[#F2F5F1]"
