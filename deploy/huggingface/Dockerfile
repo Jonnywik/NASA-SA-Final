@@ -12,7 +12,8 @@ RUN npm ci --no-audit --no-fund \
      || TANAW_STATIC_EXPORT=1 NEXT_PUBLIC_API_URL=same-origin npm run build)  # retry once: next/font downloads Google Fonts
 
 # ---- 2. backend + data + static files -----------------------------------------------------------
-FROM python:3.12-slim
+# Full image (not -slim): the rasterio wheels need system libraries such as libexpat.
+FROM python:3.12
 ENV PYTHONUNBUFFERED=1 PORT=7860
 WORKDIR /app
 COPY --from=web /src/backend ./backend
