@@ -5,7 +5,7 @@ The public demo runs on a free Hugging Face Space (Docker SDK). One container se
 browser talks to one origin.
 
 - `deploy/huggingface/Dockerfile` clones this repository (`main`), builds the frontend with
-  `TANAW_STATIC_EXPORT=1 NEXT_PUBLIC_API_URL=same-origin`, installs `backend/requirements.txt`, downloads the four
+  `TANAW_STATIC_EXPORT=1 NEXT_PUBLIC_API_URL=same-origin`, installs `backend/requirements.txt`, then `deploy/fetch_data.py` downloads the four
   data parts from the `data-package-v1` branch, checks SHA-256 `3290a66b…a2cfa`, and unzips the product.
 - `deploy/huggingface/README.md` is the Space's configuration header (Docker SDK, port 7860).
 
