@@ -1,0 +1,5 @@
+5efeb8afbd4536ed9baf7c1f870b172235ea5ef1be90e1051d240ce90e7f5dd0  tanaw-data-camanava_2026-v1.zip.part00
+84b9ef2daa13dd9900c3299b7c47749113425e6b8da6fb330e2f707b04ea5468  tanaw-data-camanava_2026-v1.zip.part01
+a1d9c3a0262d06df8719a264ec41f835ef305a3d7732ff47c1d72cf94bd255b8  tanaw-data-camanava_2026-v1.zip.part02
+e316c6feaba08afb6537c67346f3ab14a242eaa3b50e7583255dbcbf7884c7b1  tanaw-data-camanava_2026-v1.zip.part03
+3290a66b2fc115bd666c1f199c17c7e5d0c6f978132264eb28335219110a2cfa  tanaw-data-camanava_2026-v1.zip
