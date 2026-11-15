@@ -10,7 +10,7 @@ Tanaw is a work-in-progress NASA Space Apps entry for exploring flood and land-m
 - **Validation remains incomplete.** No independent agreement or threshold-sensitivity result can be claimed without real NISAR outputs. See [validation](docs/VALIDATION.md).
 - **Motion is line-of-sight**, not necessarily vertical motion. A short seasonal record is not a long-term rate. Exposure is not damage, and conditional scenarios are not predictions.
 - NASA POWER, Open-Meteo and places caches contain retrieved data; their resolution, age and coverage limit interpretation. OSM building completeness is unknown. Sentinel-1 is separate context, never relabelled as NISAR.
-- Filipino briefing text awaits native-speaker review. No personal stories are invented. Frontend integration and a public demo have not been verified here.
+- Filipino text awaits the user's review; the complete [review sheet](docs/FIL_REVIEW.md) includes UI strings, hypotheses and briefing templates. No personal stories are invented. Frontend integration builds, but visual and keyboard checks remain unverified because laptop browser control stopped; no public demo was deployed.
 
 ## Challenge mapping
 
@@ -21,11 +21,11 @@ Statuses describe software and available evidence, not a verified submission. Fe
 | NISAR surface change, flood extent and animation | Flood rhythm and pass views | Done with synthetic data; real processing blocked |
 | Coastal deformation | GUNW processing and line-of-sight series | Partial; real motion unverified |
 | Agricultural and vegetation change | Flooded vegetation and polarization processing | Done with synthetic data; real results unverified |
-| Maps, time series and accessible summaries | Workspace, search, spot check and bilingual briefing | Partial; integration and Filipino review pending |
+| Maps, time series and accessible summaries | Workspace, search, spot check and bilingual briefing | Software integrated and built; browser and Filipino review pending |
 | Actionable information | Priority-mask and exposure software, briefing exports | Partial; no observed priority result |
 | Supplemental GIS and rainfall | Places and climate caches and processing | Done with retrieved data; subject to source limitations |
 | Independent validation | Comparison software and source research | Partial; no real NISAR comparison |
-| Physical drivers and personal context | Referenced hypotheses and team stories | Partial; hypotheses are not findings; stories require team-authored text |
+| Physical drivers and personal context | Referenced hypotheses and team stories | Four sourced hypotheses integrated; hypotheses are not findings; stories require team-authored text |
 | Other sensors and future applications | Sentinel-1 context and future ideas | Partial; separate from NISAR |
 | Open source and public access | MIT licence; public demo | Partial; demo not verified |
 
@@ -71,10 +71,17 @@ cd backend
 ..\.venv\Scripts\python -m unittest discover -s tests
 cd ../frontend
 npm run lint
+npm run test:api
 npm run build
 ```
 
 CI is configured in .github/workflows/ci.yml; run results depend on the current checkout.
+
+## Integration checks and recording
+
+The spot-check card uses `/api/v1/spot-check` for its facts. It offers English and Filipino printable HTML briefings and a CSV download. The real cached boundary lookup places the test point `120.957, 14.665` in Niugan, City of Malabon. Exports were checked directly against those API facts; unavailable NISAR, motion and priority values remain missing with reasons. The Independent comparison card stays unavailable until a compatible observed comparison exists.
+
+The pass legend now uses the backend renderer's shared colours. Data credits are reachable in the Limits drawer. Source findings and unresolved coverage checks are in [SOURCE_REVIEW.md](docs/SOURCE_REVIEW.md); the remaining laptop and recording checks are in [INTEGRATION_CHECK.md](docs/INTEGRATION_CHECK.md). These checks do not establish a working observed NISAR submission.
 
 ## Repository layout
 

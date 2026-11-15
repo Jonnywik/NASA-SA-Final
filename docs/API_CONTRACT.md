@@ -58,6 +58,8 @@ Served from `<output>/camanava_2026/nisar/manifest.json` (written by scripts 20 
   "possibleFloodedVegetation": {"marginDb": 3.0, "label": "possible flooded vegetation (L-band)", "landCoverMask": null},
   "verification": {"layout": "unverified | verified | synthetic", "evidence": []},
   "studyAreaKm2": 419.5,
+  "legend": [{"id": "flood_water", "label": "Flood water", "color": "#0072B2"},
+             {"id": "possible_flooded_vegetation", "label": "Possible flooded vegetation", "color": "#E69F00"}],
   "passes": [{
     "id": "20260623", "date": "2026-06-23", "acquisitionTime": "2026-06-23T10:32:20Z",
     "acquisitionTimeManila": "2026-06-23T18:32:20+08:00",
@@ -174,7 +176,7 @@ Data and licences (full detail with sha256 in `backend/data/cache/places/manifes
 ## Spot check and briefing (Codex T4)
 
 - `GET /api/v1/spot-check?lon=&lat=` returns `{area,lon,lat,streams,dataKind,source,generatedAt,warnings,limitations}`. Streams are `place`, `nisar`, `rainfall`, `motion`, `priority`, and `exposure`; each carries `{value,reason,source,dataKind,nativeResolution,units}` and an available source timestamp. Missing parts have null values and a reason. Any synthetic stream makes the full response synthetic. Outside the study bbox gives 404 `outside_coverage`; invalid coordinates give 422 `invalid_request`.
-- `GET /api/v1/briefing/place?lon=&lat=&lang=en|fil&format=json|csv|html` returns a deterministic briefing. JSON contains `{language,translationStatus,dataKind,sentences,facts,source,generatedAt,warnings,limitations}`. CSV columns are `field,value,units,source,dataKind`. HTML is self-contained, printable, escaped, and explicitly labels synthetic content. Filipino translation remains `pending native-speaker review`. There is no runtime LLM. The frontend coordinator must wire these additive routes; no frontend files were changed for this task.
+- `GET /api/v1/briefing/place?lon=&lat=&lang=en|fil&format=json|csv|html` returns a deterministic briefing. JSON contains `{language,translationStatus,dataKind,sentences,facts,source,generatedAt,warnings,limitations}`. CSV columns are `field,value,units,source,dataKind`. HTML is self-contained, printable, escaped, and explicitly labels synthetic content. Filipino translation remains `pending native-speaker review`. There is no runtime LLM. The spot-check frontend now consumes the composed facts and provides EN/FIL HTML and CSV export buttons; exported errors follow the normal unavailable-state handling.
 
 ## Priority and validation integration (Codex T3/T5)
 
