@@ -48,3 +48,22 @@ Fishpond conversion and coastal land-use effects on flood persistence were dropp
   }
 ]
 ```
+
+
+## Candidate references from the Antigravity branch (NOT yet verified; not in the app)
+
+The Antigravity agent researched the same task on branch `antigravity/codex-tasks-t3-t7`. Its additional references are listed here **for a team member to check by opening each link** before any is added to `frontend/public/hypotheses.json`. Until checked, they are not used in the app. The coordinator could not open DOI links from the cloud session, and the DOI for Lagmay et al. (2017) in particular should be confirmed against the journal page.
+
+| Hypothesis | Candidate reference | Link |
+|---|---|---|
+| Groundwater extraction drives subsidence | Rodolfo & Siringan (2006), *Disasters* 30(1):118–139 | https://doi.org/10.1111/j.1467-9523.2006.00310.x |
+| Subsidence increases flooding | Sulapas et al. (2024), *Int. J. Applied Earth Observation and Geoinformation* 133:104107 (reported max ~109 mm/yr in Bulacan, 2014–2020) | https://doi.org/10.1016/j.jag.2024.104107 |
+| Subsidence increases flooding | Rodolfo et al. (2003), *Philippine Sociological Review* 51:17–40 | https://www.jstor.org/stable/44243070 |
+| **Fishpond conversion affects drainage** (dropped by Codex for weak support) | Lagos et al. (2022), *Flooding and Subsidence Research: Bulacan Province* (technical report) | https://www.researchgate.net/publication/369742698_Flooding_and_Subsidence_Research_Bulacan_Province_Northern_Manila_Bay_Area_Philippines |
+| Fishpond conversion affects drainage | Royal HaskoningDHV, RVO, Wetlands International, Ecoshape (2022), *North Manila Bay Flood Protection Strategy* | https://northmanilabayfps.ireport.royalhaskoningdhv.com/ |
+| Tides and river backflow | JICA, CTI Engineering, Nippon Koei (2010), *Preparatory Study for Sector Loan on Disaster Risk Management* | https://openjica.jica.go.jp/metadb/up/JICA_LTD/11999380_01.pdf |
+| Tides and river backflow | Tyree et al. (2013), *Effectiveness of CAMANAVA Flood Control Project*, J. Int. Development and Cooperation 19(3) | https://doi.org/10.15027/35045 |
+| Impervious surfaces and runoff | World Bank & AIIB (2017), *Metro Manila Flood Management Project* (P153814) | https://www.aiib.org/en/projects/details/2017/approved/Philippines-Metro-Manila-Flood-Management-Project.html |
+| Impervious surfaces and runoff | Lagmay et al. (2017), *Street floods in Metro Manila and possible solutions*, J. Environmental Sciences 59:39–47 (**confirm DOI**) | https://doi.org/10.1016/j.jes.2017.03.004 |
+
+To adopt one: open the link, confirm the citation and that the source actually supports the statement, copy a short exact quote, then add it to the matching entry in `frontend/public/hypotheses.json`.
