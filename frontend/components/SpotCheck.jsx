@@ -3,7 +3,7 @@
 import React from "react";
 import PixelChart from "./PixelChart";
 import { Caveats, Section, SourceLine, StateNote, fmt } from "./ui";
-import { AREA_ID, getGroundMotionPoint, getNisarPoint, getPassRainfall, locatePlace } from "../utils/api";
+import { AREA_ID, getGroundMotionPoint, getNisarPoint, getPassRainfall, getPlaceBriefing, locatePlace, placeBriefingUrl } from "../utils/api";
 import { useLang } from "../utils/LangContext";
 import { useReportLimits } from "../utils/LimitsContext";
 import { useTier } from "../utils/useTier";
@@ -12,16 +12,18 @@ const STATE_GLYPH = { water: "■", dry: "□", nodata: "▨" };
 
 // U2 spot check: one clicked point, every value with its source, missing values with a reason.
 export default function SpotCheck({ point, placeHint, passDates, selectedDate, onClose, onCopy, copied, onHelp }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { lon, lat } = point;
   const nisar = useTier(() => getNisarPoint(AREA_ID, lon, lat), [lon, lat]);
   const locate = useTier(() => locatePlace(lon, lat), [lon, lat]);
   const rain = useTier(passDates?.length ? () => getPassRainfall(AREA_ID, passDates) : null, [passDates?.join(",")]);
   const los = useTier(() => getGroundMotionPoint(AREA_ID, lon, lat), [lon, lat]);
+  const briefing = useTier(() => getPlaceBriefing(AREA_ID, lon, lat, lang), [lon, lat, lang]);
   useReportLimits("spot-nisar", t("spot.nisar"), nisar.data);
   useReportLimits("spot-locate", t("spot.place"), locate.data);
   useReportLimits("spot-rain", t("spot.rain"), rain.data);
   useReportLimits("spot-los", t("spot.los"), los.data);
+  useReportLimits("spot-briefing", t("spot.briefing"), briefing.data);
 
   const nd = nisar.data;
   const ld = locate.data;
@@ -201,6 +203,38 @@ export default function SpotCheck({ point, placeHint, passDates, selectedDate, o
             <PixelChart point={los.data.point} cumulative />
             <SourceLine data={los.data} className="mt-1" />
             <Caveats data={los.data} />
+          </>
+        )}
+      </Section>
+
+      <Section title={t("spot.briefing")} sensor="places" kind={briefing.data?.dataKind} testId="place-briefing">
+        <StateNote tier={briefing} label={t("spot.briefing")} />
+        {briefing.data && (
+          <>
+            <p className="whitespace-pre-line text-xs leading-relaxed text-slate-200">{briefing.data.text}</p>
+            {briefing.data.translationStatus === "pending native-speaker review" && (
+              <p className="mt-1.5 text-[11px] text-amber-200">{t("spot.briefing.pendingFil")}</p>
+            )}
+            <div className="mt-2 flex flex-wrap gap-2 text-xs">
+              <a
+                href={placeBriefingUrl(AREA_ID, lon, lat, lang, "csv")}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-sky-300 underline hover:bg-slate-700"
+              >
+                {t("spot.briefing.csv")}
+              </a>
+              <a
+                href={placeBriefingUrl(AREA_ID, lon, lat, lang, "html")}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-sky-300 underline hover:bg-slate-700"
+              >
+                {t("spot.briefing.html")}
+              </a>
+            </div>
+            <SourceLine data={briefing.data} className="mt-1.5" />
+            <Caveats data={briefing.data} />
           </>
         )}
       </Section>

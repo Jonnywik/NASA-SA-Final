@@ -124,6 +124,7 @@ def make_router(output_root, read_public_events, places_root=None):
             if (d / name).exists():
                 nm = _read(d / name)
                 break
+        pm = _read(d / 'priority_manifest.json') if mask == 'priority' and (d / 'priority_manifest.json').exists() else {}
         from processing.places.exposure import exposure_for_mask, rhythm_mask
         try:
             if mask == 'rhythm_half' and (d / 'rhythm_half.tif').exists():
@@ -136,9 +137,12 @@ def make_router(output_root, read_public_events, places_root=None):
                 res = exposure_for_mask(str(raster), level, root=root)
         except (ValueError, OSError) as exc:
             raise _err(422, 'invalid_request', f'could not read mask: {exc}')
-        kind = 'synthetic' if nm.get('dataKind') == 'synthetic' else 'derived'
+        kind = 'synthetic' if nm.get('dataKind') == 'synthetic' or pm.get('dataKind') == 'synthetic' else 'derived'
         out = base(kind)
         out['warnings'] += res['warnings']
+        for w in pm.get('warnings') or ():
+            if w not in out['warnings']:
+                out['warnings'].append(w)
         if not nm:
             out['warnings'].append('NISAR manifest not found; data kind could not be verified')
         out['limitations'] = res['limitations']

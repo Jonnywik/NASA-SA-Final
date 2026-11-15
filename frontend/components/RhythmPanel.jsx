@@ -6,9 +6,12 @@ import { Caveats, Section, SourceLine, Stat, StateNote, fmt } from "./ui";
 import { useLang } from "../utils/LangContext";
 
 // N1 flood rhythm: "flooded on k of n passes".
-export default function RhythmPanel({ tier, exposureTier, onHelp, onPlace }) {
+export default function RhythmPanel({ tier, exposureTier, validationTier, onHelp, onPlace }) {
   const { t } = useLang();
   const d = tier.data;
+  const vd = validationTier?.data;
+  const fv = vd?.floodValidation;
+  const opera = (fv?.independentSources ?? []).find((s) => s.id === "opera_dswx_s1");
   const n = d?.passCount;
   const max = d ? Math.max(0.0001, ...((d.km2ByCount ?? []).map((r) => r.km2 ?? 0))) : 1;
   return (
@@ -64,6 +67,28 @@ export default function RhythmPanel({ tier, exposureTier, onHelp, onPlace }) {
         <p className="mb-1.5 text-[11px] text-slate-400">{t("exposure.lead.rhythm")}</p>
         <ExposureTable tier={exposureTier} onPlace={onPlace} label={t("exposure.title")} />
       </Section>
+      {validationTier && (
+        <Section title={t("val.flood.title")} kind={vd?.dataKind} testId="flood-validation">
+          <StateNote tier={validationTier} label={t("val.flood.title")} />
+          {fv && (
+            <>
+              <p className="text-xs text-slate-200">{fv.reason ?? fv.status}</p>
+              {opera && (
+                <p className="mt-1 text-[11px] text-slate-300">
+                  {t("val.opera", {
+                    granules: opera.totalGranulesInWindow,
+                    matched: opera.matchedNisarPasses,
+                    total: opera.totalNisarPasses,
+                    status: opera.status,
+                  })}
+                </p>
+              )}
+              <SourceLine data={vd} className="mt-1" />
+              <Caveats data={vd} />
+            </>
+          )}
+        </Section>
+      )}
     </>
   );
 }

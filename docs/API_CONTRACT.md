@@ -167,6 +167,32 @@ Python entry point: `processing.places.exposure.exposure_for_mask(mask, level="b
 
 Data and licences (full detail with sha256 in `backend/data/cache/places/manifest.json`): boundaries HDX COD-AB PHL v03 (valid 2025-02-13, CC BY-IGO); buildings OpenStreetMap via the HOT export on HDX (snapshot 2026-10-12, ODbL; completeness unknown; Overpass was unreachable from the build environment); population WorldPop 2020 constrained 100 m BSGM (CC BY 4.0; cells without built settlement count as zero); land cover ESA WorldCover 2021 v200 10 m (CC BY 4.0), clip `esa_worldcover_2021_clip.tif`, uint8, classes 10 tree, 20 shrub, 30 grass, 40 crop, 50 built-up, 60 bare, 80 water, 90 herbaceous wetland, 95 mangrove.
 
-## Coordinator, wave 2
+## Coordinator, wave 2 (`spot_api`, `priority`, `validation_api`)
 
-`GET /spot-check?lon=&lat=`, `GET /briefing/place?lon=&lat=&lang=en|fil`, and priority zones (rhythm ≥ half AND LOS sinking).
+All routes under `/api/v1` carry `area` (default `camanava_2026`, `404 unknown_area` if unknown), `dataKind`, `source`, `generatedAt`, and `nativeResolution`; missing or blocked metrics are `null` with `reason` (never `0`).
+
+### `GET /api/v1/spot-check?area=camanava_2026&lon=&lat=`
+
+Aggregates place boundaries (HDX COD-AB), NISAR flood rhythm (`perPass`, `floodCount`, `validCount`, `permanentWater`, `possibleFloodedVegetationPasses`), NASA POWER daily rainfall windows (`sameDayMm`, `prior3DayMm`, `prior7DayMm`), P3 `ground-motion` cumulative LOS displacement (`positive_away_from_satellite`, mm and `rateMmPerYear`), and priority-zone membership (`inPriorityZone`, `thresholdMm`, `thresholdMethod`) at WGS84 `(lon, lat)`.
+
+- Errors: `422 invalid_request` (missing/non-numeric `lon`/`lat`), `404 unknown_area`, `404 outside_coverage` (outside area bbox `[120.88, 14.6, 121.04, 14.82]`).
+
+### `GET /api/v1/briefing/place?area=camanava_2026&lon=&lat=&lang=en&format=json`
+
+Deterministic plain-language briefing built from `/spot-check` in English (`lang=en`, `translationStatus: "en_source"`) or Filipino (`lang=fil`, `translationStatus: "pending native-speaker review"`).
+
+- `format`: `json` (structured sections + `title` + `text`), `csv` (`field,value,units,source,dataKind,reason` with empty value on missing metrics), or `html` (print-ready report with provenance table).
+- Synthetic warning banner/prefix is included whenever `dataKind == "synthetic"`.
+- Errors: same `422`/`404` checks plus `422 invalid_request` when `lang` is not `en|fil` or `format` is not `json|csv|html`.
+
+### Priority zones (`backend/scripts/50_priority_zones.py`, `processing/priority`)
+
+Intersects `rhythm_half.tif` (flooded on `>= ceil(validPasses / 2)` passes where `validCount >= minValidPasses`) with P3 `ground-motion` cumulative line-of-sight displacement `> T mm` (`positive_away_from_satellite`), then summarizes WorldPop population and OSM building **exposure** (not damage) by barangay and city into `priority_mask.tif` and `priority_manifest.json` under `backend/data/output/<area>/nisar/`. Exits non-zero (`data_unavailable`) when no reviewed `ground-motion` product exists unless `--synthetic-motion-demo` is passed explicitly.
+
+### `GET /api/v1/validation?area=camanava_2026`
+
+Serves precomputed validation summary from `backend/data/cache/validation/validation_<area>.json` (`dataKind: "derived"`):
+
+- `floodValidation`: independent flood comparison status (`blocked_pending_real_nisar`, `metrics: null` while NISAR product is synthetic), including NASA CMR match counts for `OPERA_L3_DSWX-S1_V1` (`C2949811996-POCLOUD`) and verified absences/limits for Copernicus EMS, UNOSAT, and NDRRMC/MMDA/PAGASA pass lists.
+- `thresholdSensitivity`: `null` metrics with `reason` until real GCOV/GUNW products exist.
+- `subsidenceComparison`: `nisarMotionStatus` (`blocked_pending_real_gunw`), `nisarCumulativeLosMm: null`, verified published northern Manila Bay / CAMANAVA subsidence citations (Rodolfo & Siringan 2006; Eco et al. 2020; Sulapas et al. 2024), and `comparisonLimits` (1-D LOS vs vertical geometry and 4-month vs multi-year baseline).

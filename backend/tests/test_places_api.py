@@ -105,6 +105,20 @@ class PlacesApiTests(unittest.TestCase):
         r = self.c.get('/api/v1/places/exposure')
         self.assertEqual(r.json()['dataKind'], 'synthetic')
 
+    def test_exposure_priority_propagates_priority_manifest_synthetic(self):
+        self.nisar('observed')
+        d = self.out / 'camanava_2026' / 'nisar'
+        write_raster(d / 'priority_mask.tif', np.array([[0, 0, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1]], 'uint8'), nodata=255)
+        (d / 'priority_manifest.json').write_text(json.dumps({
+            'dataKind': 'synthetic',
+            'warnings': ['Synthetic ground-motion demo combined with observed flood rhythm.'],
+        }))
+        r = self.c.get('/api/v1/places/exposure?mask=priority')
+        self.assertEqual(r.status_code, 200)
+        b = r.json()
+        self.assertEqual(b['dataKind'], 'synthetic')
+        self.assertIn('Synthetic ground-motion demo combined with observed flood rhythm.', b['warnings'])
+
     def test_exposure_city_level(self):
         self.nisar()
         r = self.c.get('/api/v1/places/exposure?level=city')

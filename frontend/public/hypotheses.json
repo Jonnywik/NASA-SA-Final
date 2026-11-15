@@ -1,1 +1,162 @@
-[]
+[
+  {
+    "id": "h1",
+    "isHypothesis": true,
+    "translationStatus": "pending native-speaker review",
+    "title": "Groundwater over-extraction and land subsidence",
+    "titleFil": "Labis na pagkuha ng groundwater at paggalaw ng lupa",
+    "statement": "Hypothesis: Excessive groundwater extraction may drive land subsidence in CAMANAVA and coastal Bulacan, outpacing global sea-level rise. This is a hypothesis from published studies, not a proven cause of Tanaw's 2026 line-of-sight motion observations.",
+    "statementFil": "Haypotesis: Ang labis na pagkuha ng groundwater ay maaaring nagdudulot ng paglubog ng lupa sa CAMANAVA at baybayin ng Bulacan, na mas mabilis kaysa pagtaas ng lebel ng dagat. Isa itong haypotesis mula sa mga naunang pag-aaral at hindi napatunayang sanhi ng 2026 line-of-sight motion na naobserbahan ng Tanaw.",
+    "summary": "Hypothesis: Deep-well groundwater pumping can compact deltaic sediments beneath CAMANAVA and coastal Bulacan. Tanaw's Ground motion layer shows 2026 line-of-sight motion only; overlap is not proof of cause.",
+    "summaryFil": "Haypotesis: Maaaring pinapaliit ng labis na pagbomba ng groundwater ang mga suson ng lupa sa ilalim ng CAMANAVA at baybayin ng Bulacan. Galaw sa line of sight noong 2026 lamang ang ipinapakita ng layer sa Tanaw; hindi patunay ng sanhi ang pagtatagpo.",
+    "evidenceInApp": "Ground motion (N3)",
+    "evidence": [
+      { "label": "Ground motion (N3)", "mode": "motion" }
+    ],
+    "references": [
+      {
+        "title": "Global sea-level rise is recognised, but flooding from anthropogenic land subsidence is ignored around northern Manila Bay, Philippines",
+        "citation": "Rodolfo, K. S., & Siringan, F. P. (2006). Global sea-level rise is recognised, but flooding from anthropogenic land subsidence is ignored around northern Manila Bay, Philippines. Disasters, 30(1), 118–139. https://doi.org/10.1111/j.1467-9523.2006.00310.x",
+        "year": 2006,
+        "url": "https://doi.org/10.1111/j.1467-9523.2006.00310.x",
+        "quote": "Some Philippine government sectors have begun to recognise that the sea-level rise of one to three millimetres per year due to global warming is a cause of worsening floods around Manila Bay, but are oblivious to, or ignore, the principal reason: excessive groundwater extraction is lowering the land surface by several centimetres to more than a decimetre per year."
+      },
+      {
+        "title": "Disaster in Slow Motion: Widespread Land Subsidence in and Around Metro Manila, Philippines Quantified By Insar Time-Series Analysis",
+        "citation": "Eco, R. C., Rodolfo, K. S., Sulapas, J. J., Morales Rivera, A. M., Lagmay, A. M. F., & Amelung, F. (2020). Disaster in Slow Motion: Widespread Land Subsidence in and Around Metro Manila, Philippines Quantified By Insar Time-Series Analysis. JSM Environmental Science & Ecology, 8(1), 1068. https://doi.org/10.47739/2333-7141/1068",
+        "year": 2020,
+        "url": "https://doi.org/10.47739/2333-7141/1068",
+        "quote": "Extensive land subsidence in and around Metro Manila, largely from overuse of groundwater, is orders of magnitude more rapid than sea-level rise from global warming."
+      }
+    ]
+  },
+  {
+    "id": "h2",
+    "isHypothesis": true,
+    "translationStatus": "pending native-speaker review",
+    "title": "Land subsidence and flood exposure",
+    "titleFil": "Paggalaw ng lupa at exposure sa baha",
+    "statement": "Hypothesis: Long-term land subsidence may increase flood frequency, duration, and coastal exposure in low-lying Metro Manila and Bulacan. Overlap between Tanaw's 2026 flood rhythm and line-of-sight motion is an indicator of exposure, not proof of causation.",
+    "statementFil": "Haypotesis: Ang pangmatagalang paglubog ng lupa ay maaaring nagpapadalas at nagpapatagal ng baha at nagpapataas ng exposure sa baybayin ng Metro Manila at Bulacan. Ang pagtatagpo ng ritmo ng baha at line-of-sight motion sa Tanaw ay palatandaan ng exposure, hindi patunay ng sanhi.",
+    "summary": "Hypothesis: As coastal ground lowers relative to Manila Bay, high tides and storm runoff may drain more slowly and expose more neighbourhoods. Tanaw maps where frequent water and line-of-sight motion away from the satellite overlap.",
+    "summaryFil": "Haypotesis: Kapag bumababa ang baybaying lupa kumpara sa Manila Bay, maaaring bumagal ang paghupa ng high tide at tubig-ulan at tumaas ang exposure ng mga komunidad. Ipinapakita ng Tanaw kung saan nagtatagpo ang madalas na tubig at line-of-sight motion palayo sa satellite.",
+    "evidenceInApp": "Ground motion (N3) & Flood rhythm (N2)",
+    "evidence": [
+      { "label": "Ground motion (N3)", "mode": "motion" },
+      { "label": "Flood rhythm (N2)", "mode": "rhythm" }
+    ],
+    "references": [
+      {
+        "title": "Ground subsidence in major Philippine metropolitan cities from 2014 to 2020",
+        "citation": "Sulapas, J. J. S., Ybañez, A. A. B., Marasigan, K. M. M., Grageda, J. M. B., & Lagmay, A. M. F. A. (2024). Ground subsidence in major Philippine metropolitan cities from 2014 to 2020. International Journal of Applied Earth Observation and Geoinformation, 133, 104107. https://doi.org/10.1016/j.jag.2024.104107",
+        "year": 2024,
+        "url": "https://doi.org/10.1016/j.jag.2024.104107",
+        "quote": "Monitoring this hazard is crucial as it increases the risk of floods, building and infrastructure damage, and economic loss, and exposes residents along the coast to worsening tidal incursions and storm surges due to climate change."
+      },
+      {
+        "title": "Worsening floods around northern Manila Bay, Philippines: Research-based analysis from physical and social science perspectives",
+        "citation": "Rodolfo, K. S., Siringan, F. P., Remotigue, C. T., & Lamug, C. B. (2003). Worsening floods around northern Manila Bay, Philippines: Research-based analysis from physical and social science perspectives. Philippine Sociological Review, 51, 17–40. https://www.jstor.org/stable/44243070",
+        "year": 2003,
+        "url": "https://www.jstor.org/stable/44243070",
+        "quote": "Worsening floods and tidal incursions in coastal Metro Manila and adjacent Bulacan are usually blamed on upland deforestation, urbanization, channel encroachment by informal settlers and fishponds, and garbage dumping in estuaries."
+      }
+    ]
+  },
+  {
+    "id": "h3",
+    "isHypothesis": true,
+    "translationStatus": "pending native-speaker review",
+    "title": "Fishpond conversion and coastal drainage",
+    "titleFil": "Pagbabago ng palaisdaan at daloy ng tubig sa baybayin",
+    "statement": "Hypothesis: Converting coastal wetlands and mangrove zones into diked fishponds and reclaimed land may constrict natural tidal drainage and prolong floodwater retention around northern Manila Bay. This remains a hypothesis to test against local observations.",
+    "statementFil": "Haypotesis: Ang paggawa ng mga palaisdaan at pagbabago ng gamit ng lupa sa mga bakawan at basang-lupa sa baybayin ay maaaring sumisikip sa natural na labasan ng tubig at nagpapatagal ng baha sa hilagang Manila Bay. Nananatili itong haypotesis na dapat suriin.",
+    "summary": "Hypothesis: Diked fishponds and coastal land-use changes can narrow estuarine outflows so floodwaters take longer to recede. Compare this pattern with Flood rhythm and Season pass views.",
+    "summaryFil": "Haypotesis: Maaaring pinakikitid ng mga dike ng palaisdaan at pagbabago ng lupa sa baybayin ang labasan ng tubig kaya mas matagal humupa ang baha. Ihambing ito sa Ritmo ng baha at mga pass sa Panahon.",
+    "evidenceInApp": "Flood rhythm (N2)",
+    "evidence": [
+      { "label": "Flood rhythm (N2)", "mode": "rhythm" },
+      { "label": "Season pass view (N1)", "mode": "season" }
+    ],
+    "references": [
+      {
+        "title": "Flooding and Subsidence Research: Bulacan Province, Northern Manila Bay Area, Philippines",
+        "citation": "Lagos, D. T., Eco, N. C., Rebadolla, L. J. J., & Farin, F. A. B. A. (2022). Flooding and Subsidence Research: Bulacan Province, Northern Manila Bay Area, Philippines (Diamonds in the Delta Technical Report). https://www.researchgate.net/publication/369742698_Flooding_and_Subsidence_Research_Bulacan_Province_Northern_Manila_Bay_Area_Philippines",
+        "year": 2022,
+        "url": "https://www.researchgate.net/publication/369742698_Flooding_and_Subsidence_Research_Bulacan_Province_Northern_Manila_Bay_Area_Philippines",
+        "quote": "But because of widespread conversion of wetlands to large-scale fishponds which block the outflow of floodwaters, combined with the effects of land subsidence, water flow is constricted taking more time for floods to recede..."
+      },
+      {
+        "title": "North Manila Bay Flood Protection Strategy (iReport, building on NEDA MBSDMP)",
+        "citation": "Royal HaskoningDHV, Netherlands Enterprise Agency (RVO), Wetlands International Philippines, & Ecoshape (2022). North Manila Bay Flood Protection Strategy iReport. https://northmanilabayfps.ireport.royalhaskoningdhv.com/",
+        "year": 2022,
+        "url": "https://northmanilabayfps.ireport.royalhaskoningdhv.com/",
+        "quote": "Important zoning considerations that will be adhered to in this strategy are given in the figurea below. The figures show that the MBSDMP intends to transform the current “monoculture” of fishponds into a mixed Aquaculture, Fishery and Mangrove zoning."
+      }
+    ]
+  },
+  {
+    "id": "h4",
+    "isHypothesis": true,
+    "translationStatus": "pending native-speaker review",
+    "title": "Manila Bay high tides and river backflow",
+    "titleFil": "High tide sa Manila Bay at pagbalik ng tubig-ilog",
+    "statement": "Hypothesis: Because large parts of Malabon and Navotas sit below Manila Bay high-tide elevation, high tides and river backflow may block gravity drainage and prolong flooding when combined with monsoon rain. This is a hypothesis rather than a finding from 2026 radar alone.",
+    "statementFil": "Haypotesis: Dahil mababa sa lebel ng high tide ng Manila Bay ang malaking bahagi ng Malabon at Navotas, maaaring pinipigilan ng high tide at pagbalik ng tubig sa ilog ang paglabas ng baha kapag sumabay sa ulan. Isa itong haypotesis at hindi direktang patunay mula sa 2026 radar lamang.",
+    "summary": "Hypothesis: High Manila Bay tides can push water back up tidal channels and prevent inland rain from draining in Malabon and Navotas, especially if gates or river walls are overtopped.",
+    "summaryFil": "Haypotesis: Maaaring itulak pabalik ng mataas na tide ng Manila Bay ang tubig sa mga ilog at pigilan ang paglabas ng tubig-ulan sa Malabon at Navotas, lalo na kung umapaw ang mga dike o gate.",
+    "evidenceInApp": "Season pass view (N1) & Flood rhythm (N2)",
+    "evidence": [
+      { "label": "Season pass view (N1)", "mode": "season" },
+      { "label": "Flood rhythm (N2)", "mode": "rhythm" }
+    ],
+    "references": [
+      {
+        "title": "The Preparatory Study for Sector Loan on Disaster Risk Management in the Republic of the Philippines (Final Report)",
+        "citation": "Japan International Cooperation Agency (JICA), CTI Engineering International Co., Ltd., & Nippon Koei Co., Ltd. (2010). The Preparatory Study for Sector Loan on Disaster Risk Management in the Republic of the Philippines (Final Report). https://openjica.jica.go.jp/metadb/up/JICA_LTD/11999380_01.pdf",
+        "year": 2010,
+        "url": "https://openjica.jica.go.jp/metadb/up/JICA_LTD/11999380_01.pdf",
+        "quote": "The project area of 18.5 km² is located in the northern part of Metro Manila adjacent to the Manila Bay. The area is characteristically low-lying flat terrain, with ground elevation in major parts being below high tide level. This distinct topographical feature renders the area to be frequently flooded by high tide, heavy rain and river overflow."
+      },
+      {
+        "title": "Effectiveness of CAMANAVA Flood Control Project: A Case Study of Selected Flood Control Structures during Typhoon Gener and Monsoon Rains in August 2012",
+        "citation": "Tyree, J., Johnson, S. V., Pascua, M. C. L., Rahaman, M. M., Tenorio, A. L., & Lutfi, M. (2013). Effectiveness of CAMANAVA Flood Control Project: A Case Study of Selected Flood Control Structures during Typhoon Gener and Monsoon Rains in August 2012. Journal of International Development and Cooperation, 19(3), 131–145. https://doi.org/10.15027/35045",
+        "year": 2013,
+        "url": "https://doi.org/10.15027/35045",
+        "quote": null,
+        "finding": "Evaluated Malabon Barangays Catmon, Tonsuya, and Tañong during Typhoon Gener and August 2012 habagat coinciding with high tide; documented river-wall collapses, overtopping, and hydrological baselines that omitted ongoing land subsidence."
+      }
+    ]
+  },
+  {
+    "id": "h5",
+    "isHypothesis": true,
+    "translationStatus": "pending native-speaker review",
+    "title": "Urban expansion, impervious surfaces, and runoff",
+    "titleFil": "Paglawak ng lungsod, konkretong ibabaw, at runoff",
+    "statement": "Hypothesis: Rapid urbanization and impervious surfaces reduce soil infiltration and increase surface runoff, sending water faster to low-lying streets and creek intersections. This is a hypothesis for Metro Manila drainage and not a proven cause of any single 2026 radar pass.",
+    "statementFil": "Haypotesis: Ang mabilis na urbanisasyon at mga sementadong ibabaw ay nagpapababa ng pagsipsip ng lupa at nagpaparami ng surface runoff patungo sa mabababang kalye at sapa. Isa itong haypotesis sa daloy ng tubig sa Metro Manila at hindi napatunayang sanhi ng isang partikular na pass sa 2026.",
+    "summary": "Hypothesis: Concrete and asphalt reduce rainwater absorption, increasing peak runoff into Metro Manila drains and topographic lows where creeks cross streets.",
+    "summaryFil": "Haypotesis: Pinabababa ng semento at aspalto ang pagsipsip ng ulan, kaya tumataas ang runoff patungo sa mga imburnal at mabababang sangandaan ng sapa at kalye sa Metro Manila.",
+    "evidenceInApp": "Rainfall history & Season pass view (N1)",
+    "evidence": [
+      { "label": "Rainfall history", "mode": "history" },
+      { "label": "Season pass view (N1)", "mode": "season" }
+    ],
+    "references": [
+      {
+        "title": "Philippines: Metro Manila Flood Management Project (Project ID P153814)",
+        "citation": "World Bank & Asian Infrastructure Investment Bank (AIIB) (2017). Philippines: Metro Manila Flood Management Project (Project ID P153814). https://www.aiib.org/en/projects/details/2017/approved/Philippines-Metro-Manila-Flood-Management-Project.html",
+        "year": 2017,
+        "url": "https://www.aiib.org/en/projects/details/2017/approved/Philippines-Metro-Manila-Flood-Management-Project.html",
+        "quote": "Reduced absorptive capacity of soil due to rapid urbanization, resulting in increased flash flood events; Under-designed flood management infrastructure resulting in an insufficient level of protection of a large urban area."
+      },
+      {
+        "title": "Street floods in Metro Manila and possible solutions",
+        "citation": "Lagmay, A. M. F., Mendoza, J. E., Cipriano, F., Delmendo, P. A., Lacsamana, M. N., Moises, M. A., Pellejera, N., Punay, K. N., Sabio, G., Santos, L., Serrano, J. S., Taniza, H. J., & Tingin, N. E. (2017). Street floods in Metro Manila and possible solutions. Journal of Environmental Sciences, 59, 39–47. https://doi.org/10.1016/j.jes.2017.03.004",
+        "year": 2017,
+        "url": "https://doi.org/10.1016/j.jes.2017.03.004",
+        "quote": "Majority of flood-prone areas are along the intersection of creeks and streets located in topographic lows."
+      }
+    ]
+  }
+]

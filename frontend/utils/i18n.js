@@ -390,6 +390,15 @@ export const en = {
   "radar.bands.p3":
     "Sentinel-1 has a long archive from 2014, which Tanaw uses as regional context. NISAR gives L-band for the 2026 season. Tanaw never merges the two into one number, because they see the ground differently.",
   "radar.bands.tip": "L-band reaches deeper into vegetation. C-band reads the surface.",
+
+  "spot.briefing": "Place briefing",
+  "spot.briefing.csv": "Download CSV",
+  "spot.briefing.html": "Open printable HTML",
+  "spot.briefing.pendingFil": "Filipino text: pending native-speaker review.",
+  "val.flood.title": "Independent flood validation",
+  "val.motion.title": "Published subsidence context",
+  "val.studies": "Published CAMANAVA / Manila Bay studies (multi-year context, not 1:1 with 4-month LOS)",
+  "val.opera": "NASA OPERA DSWx-S1 catalogue: {granules} granules matched {matched} of {total} NISAR passes (±2 days; status: {status}).",
 };
 
 // PENDING NATIVE REVIEW. Do not present as final until the team's Filipino reviewer has signed it off.
@@ -760,6 +769,15 @@ export const fil = {
   "radar.bands.p3":
     "May mahabang archive ang Sentinel-1 mula 2014, na ginagamit ng Tanaw bilang rehiyonal na konteksto. Nagbibigay ang NISAR ng L-band para sa panahon ng 2026. Hindi pinagsasama ng Tanaw ang dalawa sa iisang numero dahil magkaiba ang tingin nila sa lupa.",
   "radar.bands.tip": "mas malalim ang abot ng L-band sa halaman. Ibabaw ang binabasa ng C-band.",
+
+  "spot.briefing": "Ulat ng lugar",
+  "spot.briefing.csv": "I-download ang CSV",
+  "spot.briefing.html": "Buksan ang printable na HTML",
+  "spot.briefing.pendingFil": "Tekstong Filipino: naghihintay ng pagsusuri ng katutubong tagapagsalita.",
+  "val.flood.title": "Independiyenteng beripikasyon ng baha",
+  "val.motion.title": "Konteksto mula sa mga nailathalang pag-aaral sa subsidence",
+  "val.studies": "Mga nailathalang pag-aaral sa CAMANAVA / Manila Bay (pangmatagalang konteksto, hindi 1:1 sa 4-buwang LOS)",
+  "val.opera": "Katalogo ng NASA OPERA DSWx-S1: {granules} na granule ang tumugma sa {matched} sa {total} na pass ng NISAR (±2 araw; katayuan: {status}).",
 };
 
 export const DICT = { en, fil };

@@ -348,3 +348,21 @@ export async function getPlaceBoundaries(level = "barangay") {
 export async function getPlaceExposure(area, mask, level = "barangay") {
   return request(`${V1}/places/exposure`, { area, mask, level }, "Could not load exposure");
 }
+
+// --- coordinator wave 2: spot-check, place briefing, validation ------------
+
+export async function getSpotCheck(area = AREA_ID, lon, lat) {
+  return request(`${V1}/spot-check`, { area, lon, lat }, "Could not load spot check");
+}
+
+export async function getPlaceBriefing(area = AREA_ID, lon, lat, lang = "en") {
+  return request(`${V1}/briefing/place`, { area, lon, lat, lang, format: "json" }, "Could not load place briefing");
+}
+
+export function placeBriefingUrl(area = AREA_ID, lon, lat, lang = "en", format = "csv") {
+  return assetUrl(`${V1}/briefing/place${queryString({ area, lon, lat, lang, format })}`);
+}
+
+export async function getValidation(area = AREA_ID) {
+  return request(`${V1}/validation`, { area }, "Could not load validation summary");
+}

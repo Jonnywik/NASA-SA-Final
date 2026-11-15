@@ -33,6 +33,7 @@ import {
   getScenarios,
   getSeasonRank,
   getTimelineAvailability,
+  getValidation,
   searchPlaces,
 } from "../utils/api";
 import { useLang } from "../utils/LangContext";
@@ -135,6 +136,7 @@ function Workspace({ onRegional }) {
 
   const needRhythm = useLatched(mode === "rhythm" || mode === "motion");
   const rhythmTier = useTier(needRhythm ? () => getNisarRhythm(AREA_ID) : null, [needRhythm]);
+  const validationTier = useTier(needRhythm ? () => getValidation(AREA_ID) : null, [needRhythm]);
   const needRhythmTable = useLatched(mode === "rhythm");
   const exposureRhythm = useTier(needRhythmTable ? () => getPlaceExposure(AREA_ID, "rhythm_half") : null, [needRhythmTable]);
   const needMotion = useLatched(mode === "motion");
@@ -162,6 +164,7 @@ function Workspace({ onRegional }) {
     ["exp-rhythm", t("exposure.title"), exposureRhythm.data],
     ["motion", t("motion.title"), motionTier.data],
     ["exp-priority", t("priority.title"), exposurePriority.data],
+    ["validation", t("val.flood.title"), validationTier.data],
     ["pol", t("season.layer.rgb"), polTier.data],
     ["avail", t("hist.avail.title"), availability.data],
     ["monthly", t("hist.monthly.title"), monthly.data],
@@ -580,13 +583,13 @@ function Workspace({ onRegional }) {
                 )}
                 {mode === "rhythm" && (
                   <>
-                    <RhythmPanel tier={rhythmTier} exposureTier={exposureRhythm} onHelp={openHelp} onPlace={onZone} />
+                    <RhythmPanel tier={rhythmTier} exposureTier={exposureRhythm} validationTier={validationTier} onHelp={openHelp} onPlace={onZone} />
                     <HypothesesPanel items={hypotheses} onMode={(m) => MODES.includes(m) && goMode(m)} />
                   </>
                 )}
                 {mode === "motion" && (
                   <>
-                    <MotionPanel tier={motionTier} scale={losScale} rhythmUnder={rhythmUnder} onRhythmUnder={setRhythmUnder} priorityTier={exposurePriority} onHelp={openHelp} onPlace={onZone} />
+                    <MotionPanel tier={motionTier} scale={losScale} rhythmUnder={rhythmUnder} onRhythmUnder={setRhythmUnder} priorityTier={exposurePriority} validationTier={validationTier} onHelp={openHelp} onPlace={onZone} />
                     <HypothesesPanel items={hypotheses} onMode={(m) => MODES.includes(m) && goMode(m)} />
                   </>
                 )}

@@ -12,9 +12,11 @@ function span(epochs) {
 
 // N3 ground motion on camanava_2026, line of sight. Reference area, epochs and correction state come
 // from the API; anything it does not report says so.
-export default function MotionPanel({ tier, scale, rhythmUnder, onRhythmUnder, priorityTier, onHelp, onPlace }) {
+export default function MotionPanel({ tier, scale, rhythmUnder, onRhythmUnder, priorityTier, validationTier, onHelp, onPlace }) {
   const { t } = useLang();
   const d = tier.data;
+  const vd = validationTier?.data;
+  const sc = vd?.subsidenceComparison;
   const none = t("missing.notReported");
   const days = span(d?.epochs);
   const corrections = Array.isArray(d?.correctionsApplied) ? d.correctionsApplied : null;
@@ -88,6 +90,45 @@ export default function MotionPanel({ tier, scale, rhythmUnder, onRhythmUnder, p
         <p className="mb-1.5 text-[11px] text-slate-300">{t("priority.lead")}</p>
         <ExposureTable tier={priorityTier} onPlace={onPlace} label={t("priority.title")} />
       </Section>
+
+      {validationTier && (
+        <Section title={t("val.motion.title")} kind={vd?.dataKind} testId="subsidence-comparison">
+          <StateNote tier={validationTier} label={t("val.motion.title")} />
+          {sc && (
+            <>
+              <p className="text-xs text-slate-200">{sc.reason ?? sc.nisarMotionStatus}</p>
+              {Array.isArray(sc.publishedStudies) && sc.publishedStudies.length > 0 && (
+                <>
+                  <p className="mt-2 text-[11px] font-semibold text-slate-300">{t("val.studies")}</p>
+                  <ul className="mt-1 list-disc space-y-1 pl-4 text-[11px] text-slate-300">
+                    {sc.publishedStudies.map((s) => (
+                      <li key={s.id ?? s.citation}>
+                        {s.url ? (
+                          <a href={s.url} target="_blank" rel="noreferrer" className="text-sky-300 underline">
+                            {s.citation}
+                          </a>
+                        ) : (
+                          s.citation
+                        )}
+                        {s.publishedRate ? ` — ${s.publishedRate}` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {Array.isArray(sc.comparisonLimits) && sc.comparisonLimits.length > 0 && (
+                <ul className="mt-1.5 list-disc space-y-0.5 pl-4 text-[11px] text-slate-400">
+                  {sc.comparisonLimits.map((lim) => (
+                    <li key={lim}>{lim}</li>
+                  ))}
+                </ul>
+              )}
+              <SourceLine data={vd} className="mt-1.5" />
+              <Caveats data={vd} />
+            </>
+          )}
+        </Section>
+      )}
     </>
   );
 }
